@@ -1,18 +1,33 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as S from './styles'
-
 import * as enums from '../../utils/enums/Tarefa'
 import { useDispatch } from 'react-redux'
-import { remover } from '../../store/reducers/tarefas'
+import { remover, editar } from '../../store/reducers/tarefas'
 import TarefaClass from '../../models/Tarefa'
 
 type Props = TarefaClass
 
-const Tarefa = ({ descricao, prioridade, status, titulo, id }: Props) => {
-  const [estaEditando, setEstaEditando] = useState(false)
-  const [descricaoLocal, setDescricaoLocal] = useState(descricao)
-
+const Tarefa = ({
+  descricao: descricaoOriginal,
+  prioridade,
+  status,
+  titulo,
+  id
+}: Props) => {
   const dispatch = useDispatch()
+  const [estaEditando, setEstaEditando] = useState(false)
+  const [descricao, setDescricao] = useState('')
+
+  useEffect(() => {
+    if (descricaoOriginal.length > 0) {
+      setDescricao(descricaoOriginal)
+    }
+  }, [descricaoOriginal])
+
+  function cancelarDescricao() {
+    setEstaEditando(false)
+    setDescricao(descricaoOriginal)
+  }
 
   return (
     <S.Card>
@@ -24,15 +39,31 @@ const Tarefa = ({ descricao, prioridade, status, titulo, id }: Props) => {
         {status}
       </S.Tag>
       <S.Descricao
-        value={descricaoLocal}
-        onChange={(e) => setDescricaoLocal(e.target.value)}
+        disabled={!estaEditando}
+        value={descricao}
+        onChange={(evento) => setDescricao(evento.target.value)}
         readOnly={!estaEditando}
       />
       <S.BarraAcoes>
         {estaEditando ? (
           <>
-            <S.BotaoSalvar>Salvar</S.BotaoSalvar>
-            <S.BotaoSCancelar onClick={() => setEstaEditando(false)}>
+            <S.BotaoSalvar
+              onClick={() => {
+                dispatch(
+                  editar({
+                    descricao,
+                    prioridade,
+                    status,
+                    titulo,
+                    id
+                  }),
+                  setEstaEditando(false)
+                )
+              }}
+            >
+              Salvar
+            </S.BotaoSalvar>
+            <S.BotaoSCancelar onClick={cancelarDescricao}>
               Cancelar
             </S.BotaoSCancelar>
           </>
