@@ -39,7 +39,7 @@ const Tarefa = ({ descricao, prioridade, status, titulo, id }: Props) => {
         ) : (
           <>
             <S.Botao onClick={() => setEstaEditando(true)}>Editar</S.Botao>
-            <S.BotaoRemover onClick={() => dispatch.remover(id)}>
+            <S.BotaoRemover onClick={() => dispatch(remover(id))}>
               Remover
             </S.BotaoRemover>
           </>
