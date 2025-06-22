@@ -3,7 +3,6 @@ import * as S from './styles'
 import { alterarFiltro } from '../../store/reducers/filtro'
 import * as enums from '../../utils/enums/Tarefa'
 import { RootReducer } from '../../store'
-import tarefas from '../../store/reducers/tarefas'
 
 export type Props = {
   legenda: string
@@ -13,7 +12,7 @@ export type Props = {
 
 const FiltroCard = ({ legenda, criterio, valor }: Props) => {
   const dispatch = useDispatch()
-  const { filtro } = useSelector((state: RootReducer) => state)
+  const { filtro, tarefas } = useSelector((state: RootReducer) => state)
 
   const verificaEstaAtivo = () => {
     const mesmoCriterio = filtro.criterio === criterio
@@ -25,10 +24,10 @@ const FiltroCard = ({ legenda, criterio, valor }: Props) => {
   const contarTarefas = () => {
     if (criterio === 'todas') return tarefas.itens.length
     if (criterio === 'prioridade') {
-      return tarefas.itens.filter(item.prioridade === valor).length
+      return tarefas.itens.filter((item) => item.prioridade === valor).length
     }
     if (criterio === 'status') {
-      return tarefas.itens.filter(item.status === valor).length
+      return tarefas.itens.filter((item) => item.status === valor).length
     }
   }
 

@@ -6,7 +6,7 @@ class Tarefa {
   estado: enums.Status
   descricao: string
   id: number
-  status: enums.Prioridade | enums.Status | undefined
+  status: enums.Status
 
   constructor(
     titulo: string,
@@ -20,6 +20,7 @@ class Tarefa {
     this.estado = estado
     this.descricao = descricao
     this.id = id
+    this.status = estado
   }
 }
 
